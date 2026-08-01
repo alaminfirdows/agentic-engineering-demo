@@ -1,4 +1,5 @@
 {
+    "includeCoAuthoredBy": false,
     "env": {
         "ANTHROPIC_MODEL": "haiku",
         "CLAUDE_CODE_DISABLE_1M_CONTEXT": "1",
