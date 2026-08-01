@@ -1,3 +1,9 @@
+---
+paths:
+  - "resources/js/pages/**/*.tsx"
+  - "app/Http/Controllers/**/*.php"
+---
+
 # Inertia Rules
 
 ## Inertia v3 Essentials

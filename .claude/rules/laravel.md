@@ -1,3 +1,10 @@
+---
+paths:
+  - "app/**/*.php"
+  - "database/**/*.php"
+  - "routes/**/*.php"
+---
+
 # Laravel Rules
 
 ## FormRequest Validation

@@ -1,3 +1,8 @@
+---
+paths:
+  - "tests/**/*.php"
+---
+
 # Testing Rules
 
 ## Pest Framework

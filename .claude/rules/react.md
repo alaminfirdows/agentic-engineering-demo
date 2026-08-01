@@ -1,3 +1,9 @@
+---
+paths:
+  - "resources/js/**/*.tsx"
+  - "resources/js/**/*.ts"
+---
+
 # React Rules
 
 ## Functional Components Only
