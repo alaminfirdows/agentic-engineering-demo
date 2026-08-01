@@ -1,0 +1,16 @@
+// .claude/settings.json   (or ~/.claude/settings.json)
+{
+    "hooks": {
+        "PostToolUse": [
+            {
+                "matcher": "Write|Edit",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "pm run format || true"
+                    }
+                ]
+            }
+        ]
+    }
+}
