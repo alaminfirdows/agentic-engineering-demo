@@ -1,8 +1,5 @@
 ---
-name: pr-summary
 description: Summarize changes in a pull request
-context: fork
-agent: Explore
 allowed-tools: Bash(gh *)
 ---
 

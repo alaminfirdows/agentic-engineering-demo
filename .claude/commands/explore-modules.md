@@ -1,8 +1,6 @@
 ---
-name: explore-modules
 description: Explore multiple codebase modules in parallel
 argument-hint: <main-task-description>
-context: fork
 ---
 
 ## Your task

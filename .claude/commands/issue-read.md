@@ -1,9 +1,6 @@
 ---
-name: issue-read
 description: Read and display a GitHub issue with full context
 argument-hint: <issue-number-or-link>
-context: fork
-agent: Explore
 allowed-tools: Bash(gh *)
 ---
 
