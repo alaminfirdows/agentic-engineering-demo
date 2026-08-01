@@ -1,9 +1,12 @@
-**Allowlist read-only commands to kill prompt fatigue**
+# Allowlist read-only commands to kill prompt fatigue
 
-Add `Bash(ls:*)`, `Bash(rg:*)`, `Bash(git status:*)` etc to settings — the agent stops asking permission for safe inspection.
+Add `Bash(ls:*)`, `Bash(rg:*)`, `Bash(git status:*)` etc to settings — the agent stops asking permission for safe inspection commands.
 
-```jsx
-// .claude/settings.json
+## Configuration
+
+Add to `.claude/settings.json`:
+
+```json
 {
   "permissions": {
     "allow": [
@@ -18,3 +21,7 @@ Add `Bash(ls:*)`, `Bash(rg:*)`, `Bash(git status:*)` etc to settings — the age
   }
 }
 ```
+
+## Benefit
+
+No more permission prompts for safe read-only operations, letting the agent work faster without interruptions.

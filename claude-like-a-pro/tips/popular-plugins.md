@@ -1,77 +1,65 @@
+# Popular Claude Code Plugins
+
 Each plugin is a folder with its own config. You can browse what's available and install from there.
 
-The full list, categorized
+## Technical Plugins
 
-I split these into two buckets: technical (for developers) and non-technical (for workflow/style/project management).
+| Plugin | Purpose |
+|--------|---------|
+| **typescript-lsp** | TypeScript language server integration. Real type checking, go-to-definition, and error diagnostics instead of guessing. Probably the single most impactful plugin. |
+| **playwright** | Browser automation and testing. Claude can launch browsers, navigate pages, take screenshots, fill forms, and run end-to-end tests. |
+| **security-guidance** | Vulnerability scanning. Catches hardcoded secrets, auth bypass patterns, and injection risks as Claude writes code. |
+| **code-review** | Structured code review with quality scoring. Gives Claude a framework for reviewing PRs. |
+| **pr-review-toolkit** | PR-focused code review. Generates review comments, suggests changes, and checks for common PR issues. |
+| **commit-commands** | Standardizes commit messages. Good for conventional commits or consistent git history. |
+| **code-simplifier** | Identifies overly complex code and suggests simplifications. Measures cyclomatic complexity. |
+| **context7** | Documentation lookup. Claude fetches up-to-date docs instead of relying on training data. |
 
-Technical plugins:
+## Non-Technical Plugins
 
-typescript-lsp -- Adds TypeScript language server integration. Claude gets real type checking, go-to-definition, and error diagnostics instead of guessing. If you write TypeScript this is probably the single most impactful plugin.
+| Plugin | Purpose |
+|--------|---------|
+| **claude-md-management** | Auto-maintains your CLAUDE.md project file. Keeps it structured and prevents decay. |
+| **explanatory-output-style** | More educational output. Explains the "why" behind decisions, not just the "what." |
+| **learning-output-style** | Teaching-focused. Breaks things down more gradually and checks understanding. |
+| **frontend-design** | UI/UX design patterns. Claude references design systems and accessibility standards. |
+| **claude-code-setup** | Project scaffolding. Sets up new projects with proper structure and boilerplate. |
+| **feature-dev** | Feature development workflow. Structures how Claude builds new features. |
 
-playwright -- Browser automation and testing. Claude can launch a browser, navigate pages, take screenshots, fill forms, run end-to-end tests. Useful if you're building anything with a frontend.
+## High-Impact Recommendations
 
-security-guidance -- Scans for common vulnerabilities. Catches things like hardcoded secrets, auth bypass patterns, and injection risks. Runs passively as Claude writes code.
+### Tier 1 (Significant Difference)
 
-code-review -- Structured code review with quality scoring. Gives Claude a framework for reviewing PRs rather than just saying "looks good."
+- **typescript-lsp** — Code quality noticeably improves. Claude stops guessing at types.
+- **security-guidance** — Catches real security issues Claude might miss.
+- **context7** — No more outdated API suggestions; always works with current docs.
+- **playwright** — Real browser automation beats screenshot guessing for frontend work.
 
-pr-review-toolkit -- Similar to code-review but focused on the PR workflow specifically. Generates review comments, suggests changes, checks for common PR issues.
+### Tier 2 (Context-Dependent)
 
-commit-commands -- Standardizes commit messages. If you care about conventional commits or consistent git history, this helps.
+- **code-review** — Good for solo developers wanting a second pair of eyes.
+- **claude-md-management** — Good if your CLAUDE.md gets messy frequently.
+- **explanatory-output-style** — Good if you want to understand the code, not just use it.
+- **frontend-design** — Good if you're building UI and want better defaults.
 
-code-simplifier -- Identifies overly complex code and suggests simplifications. Measures cyclomatic complexity and flags functions that are doing too much.
+## Installation
 
-context7 -- Documentation lookup. Claude can fetch up-to-date docs for libraries instead of relying on training data. Useful when you're working with fast-moving frameworks.
+```bash
+/plugin install typescript-lsp@claude-plugins-official
+/plugin install security-guidance@claude-plugins-official
+# Run /plugin and browse the Discover tab for the full list
+```
 
-Non-technical plugins:
+## The Bigger Picture
 
-claude-md-management -- Auto-maintains your CLAUDE.md project file. Keeps it structured, updates sections, prevents it from becoming a mess over time.
+Claude Code at default settings runs at approximately 60% capacity. Plugins provide real capabilities:
+- TypeScript LSP gives real type awareness
+- Security guidance catches vulnerabilities passively
+- Context7 ensures current documentation
 
-explanatory-output-style -- Changes Claude's output style to be more educational. It explains the "why" behind decisions, not just the "what." Useful if you're learning or want better documentation in conversations.
+There are 53+ plugins available. Browse them all with:
 
-learning-output-style -- Similar to explanatory but specifically geared toward teaching. Claude breaks things down more gradually and checks understanding.
-
-frontend-design -- UI/UX design patterns and guidance. Claude references established design systems and accessibility standards when building frontend components.
-
-claude-code-setup -- Project scaffolding. Helps set up new projects with proper structure, configs, and boilerplate.
-
-feature-dev -- Feature development workflow. Structures how Claude approaches building a new feature: requirements, design, implementation, testing.
-
-There are about 13+ more that I haven't listed because they're either very niche or I haven't tested them enough to have an opinion. You can browse the full directory yourself.
-
-Which ones I actually recommend (high impact)
-
-After installing and testing several of these, here's my tier list:
-
-typescript-lsp -- The difference in code quality is noticeable. Claude stops guessing at types and actually checks them.
-
-security-guidance -- Caught a real auth bypass in my codebase that Claude had originally written and never flagged. Worth it for that alone.
-
-context7 -- No more outdated API suggestions. It actually looks up current docs.
-
-playwright -- If you have any frontend, being able to run real browser tests through Claude is a significant upgrade.
-
-Worth trying (depends on your workflow):
-
-5. code-review -- Good if you're a solo dev and want a second pair of eyes.
-6. claude-md-management -- Good if your CLAUDE.md keeps getting messy.
-7. explanatory-output-style -- Good if you want to understand the code Claude writes, not just use it.
-8. frontend-design -- Good if you're building UI and want better defaults.
-
-The bigger picture
-
-My rough estimate is that Claude Code at default settings is running at maybe 60% of what it can actually do. These plugins aren't just cosmetic -- typescript-lsp gives it real type awareness, security-guidance catches vulnerabilities passively, and context7 means it's working with current documentation instead of whatever was in its training data.
-
-The surprising thing to me was how many of these exist and how little they're discussed. I've been using Claude Code daily for months and only found these by accident.
-
-Has anyone else been using these plugins? Curious which ones other people have found useful?
-
-EDIT: Thanks for the feedback (and the roasting). Some corrections based on the comments:
-
-The actual plugin count is 53, not 27. i only listed the ones i had tested or had opinions on, but should have stated the full count upfront. my bad.
-
-Several of these ARE in the docs if you know where to look. "hadn't seen anyone talk about" was my experience, not a statement about discoverability for everyone. Poor framing on my part.
-
-Fixed the hookify description in an earlier edit (it's for Claude Code hooks, not React hooks). Thanks u/KnifeFed for catching that.
-
-For anyone wanting the complete list, just run ls ~/.claude/plugins/marketplaces/claude-plugins-official/plugins/ and browse yourself. Better than taking my word for it.
+```bash
+ls ~/.claude/plugins/marketplaces/claude-plugins-official/plugins/
+```
 

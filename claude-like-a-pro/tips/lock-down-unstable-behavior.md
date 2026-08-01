@@ -1,9 +1,12 @@
-**Lock down Claude Code's unstable behavior**
+# Lock down Claude Code's unstable behavior
 
 Disable 1M context, adaptive thinking, and auto-memory in settings — and pin the subagent model to Sonnet — for noticeably more reliable runs.
 
-```jsx
-// ~/.claude/settings.json
+## Configuration
+
+Add to `~/.claude/settings.json`:
+
+```json
 {
   "effortLevel": "high",
   "env": {
@@ -14,3 +17,7 @@ Disable 1M context, adaptive thinking, and auto-memory in settings — and pin t
   }
 }
 ```
+
+## Effect
+
+More predictable agent behavior, consistent model selection, and reduced erratic decisions in complex tasks.
