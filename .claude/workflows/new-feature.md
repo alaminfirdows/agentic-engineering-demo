@@ -1,7 +1,214 @@
 # New Feature Workflow
 
-## Goal
-Implement a complete feature end-to-end: backend + frontend + tests.
+## Purpose
+Implement complete feature end-to-end: database → backend → frontend → tests → verification.
+
+## When to Use
+- Building new user-facing feature
+- Adding new API endpoint
+- Implementing new data model
+- Cross-system feature (backend + frontend + tests)
+
+## Steps
+
+### 1. Design & Planning
+- [ ] Understand domain: read existing Models, Actions, API patterns
+- [ ] Check schema: `mcp__laravel-boost__database-schema`
+- [ ] Identify affected resources and relationships
+- [ ] Verify no conflicts with existing features
+- [ ] Plan team isolation if multi-tenant feature
+
+### 2. Database & Models
+```bash
+php artisan make:migration create_invoices_table --create=invoices
+php artisan make:model Invoice --migration --factory
+php artisan migrate
+```
+
+Define relationships in models (belongsTo, hasMany, belongsToMany).
+Create factory with realistic test data and states.
+
+### 3. Backend: Validation & Actions
+```bash
+php artisan make:request CreateInvoiceRequest
+php artisan make:action CreateInvoiceAction
+php artisan make:policy InvoicePolicy --model=Invoice
+php artisan make:resource InvoiceResource
+```
+
+FormRequest rules:
+- Input validation: email, unique, max length
+- Authorization: authorize() method
+- Data transformation: prepareForValidation()
+
+Action responsibilities:
+- Single use case per action
+- Dependency injection for services
+- Proper return types
+- Call external services (Mail, Stripe, etc.)
+
+Policy methods:
+- view, create, update, delete, restore
+- Check team ownership and user role
+
+### 4. Backend: Routes & Controller
+```bash
+php artisan make:controller InvoiceController --resource
+```
+
+Routes (with Wayfinder names):
+```php
+Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
+```
+
+Thin controller (max 15 lines per method):
+- Validate via FormRequest
+- Authorize via Policy
+- Delegate to Action
+- Return Inertia or Resource
+
+Example:
+```php
+public function store(CreateInvoiceRequest $request, CreateInvoiceAction $action)
+{
+    $invoice = $action->execute($request->validated());
+    return redirect('/invoices')->with('success', 'Invoice created');
+}
+```
+
+### 5. Frontend: Pages & Forms
+Create pages in `resources/js/pages/`:
+
+Page structure:
+```tsx
+interface Props {
+    invoices: Invoice[];
+}
+
+export default function InvoicesPage({ invoices }: Props) {
+    return <div>{/* content */}</div>;
+}
+```
+
+Form with useForm hook:
+```tsx
+const { data, setData, post, errors } = useForm({
+    customer_id: '',
+    due_date: '',
+});
+
+const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    post('/invoices');
+};
+```
+
+Reusable components in `resources/js/components/`.
+Custom hooks in `resources/js/hooks/` if logic is reusable.
+
+### 6. Testing
+**Feature tests** (request → response):
+```php
+test('lists all invoices', function () {
+    Invoice::factory()->count(3)->create();
+    $response = $this->get('/invoices');
+    expect($response)->status()->toBe(200);
+});
+```
+
+Test three scenarios for each endpoint:
+- ✅ Happy path (works correctly)
+- ❌ Validation failures (bad input rejected)
+- 🔒 Authorization failures (unauthorized users blocked)
+
+**Unit tests** (Action logic):
+```php
+test('creates invoice with number', function () {
+    $action = new CreateInvoiceAction(...);
+    $invoice = $action->execute(['customer_id' => 1]);
+    expect($invoice->invoice_number)->toMatch('/INV-/');
+});
+```
+
+### 7. Polish & Verification
+```bash
+vendor/bin/pint --dirty          # Format PHP
+npm run format                   # Format JavaScript
+php artisan test --compact       # Run all tests
+npm run lint                     # Check TypeScript/React
+```
+
+Before submitting:
+- [ ] All tests pass (feature + unit + integration)
+- [ ] No type warnings (Larastan, TypeScript)
+- [ ] Code formatted (Pint, Prettier)
+- [ ] Feature tested in browser (click through)
+- [ ] Edge cases handled gracefully
+- [ ] Error messages are user-friendly
+- [ ] Unauthorized users are blocked (policy checked)
+- [ ] Database queries optimized (no N+1)
+- [ ] Team isolation verified (if multi-tenant feature)
+
+## Rules
+
+**Database**
+- ✅ Use `php artisan make:migration` (never manual)
+- ✅ Always set foreign keys: `$table->foreign('user_id')->on('users')`
+- ✅ Use soft deletes for financial records: `$table->softDeletes()`
+- ✅ Index foreign keys: `$table->foreign('user_id')->references('id')`
+
+**Backend**
+- ✅ Thin controllers: delegate to Actions
+- ✅ All input validation in FormRequest
+- ✅ All authorization in Policies
+- ✅ Type all parameters and returns
+- ✅ Inject dependencies, never use facades inside domain logic
+- ❌ No business logic in controllers
+- ❌ No business logic in models (except relationships, scopes)
+
+**Frontend**
+- ✅ Use functional components with hooks only
+- ✅ Type all props with TypeScript
+- ✅ Use useForm for forms
+- ✅ Use Inertia hooks (useForm, useHttp, router)
+- ✅ Extract reusable logic into custom hooks
+- ❌ No class components
+- ❌ No untyped props
+
+**Testing**
+- ✅ Use Pest v5 (not PHPUnit)
+- ✅ Test happy path + validation + authorization
+- ✅ Use factories for all test data
+- ✅ Mock external services (Mail, Stripe)
+- ✅ One assertion per test (when possible)
+- ❌ Never use manual `new Model()` in tests
+- ❌ Never mock internal classes/actions
+
+**Multi-Tenant**
+- ✅ All queries filtered by team: `Invoice::forTeam($user->team)`
+- ✅ Policies verify team ownership: `$user->team_id === $invoice->team_id`
+- ✅ Check subscription status before premium features
+- ❌ Never trust team_id from request parameter
+
+## Output
+
+Checklist for completion:
+- [ ] Database migration created and ran
+- [ ] Models with relationships defined
+- [ ] FormRequest with validation
+- [ ] Action with dependency injection
+- [ ] Controller thin and delegating
+- [ ] Policy with authorization checks
+- [ ] API Resource for output
+- [ ] Frontend pages and components
+- [ ] Forms with useForm hook
+- [ ] Feature tests (happy + fail + auth)
+- [ ] All tests passing
+- [ ] Code formatted
+- [ ] Type checking clean
+- [ ] Tested in browser
+- [ ] Ready for code review
 
 ## Prerequisites
 
