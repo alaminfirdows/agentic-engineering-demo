@@ -8,7 +8,28 @@
     },
     "permissions": {
         "allow": ["Bash(php artisan *)"],
-        "deny": []
+        "deny": [
+            "Bash(git commit *)",
+            "Bash(git push *)",
+            "Bash(*force*push*)"
+        ],
+        "ask": [
+            "Bash(git *)"
+        ]
     },
-    "skipDangerousModePermissionPrompt": true
+    "skipDangerousModePermissionPrompt": true,
+    "hooks": {
+        "PermissionRequest": [
+            {
+                "matcher": "Bash",
+                "hooks": [
+                    {
+                        "type": "prompt",
+                        "prompt": "CRITICAL: Check if user explicitly approved git commit/push in THIS conversation.\n\nCommand: $ARGUMENTS\n\nRespond with ONLY 'true' or 'false':\n- true ONLY if user explicitly said something like: 'commit this', 'go ahead and commit', 'push this', 'create a commit', etc. in the CURRENT conversation\n- false for ANYTHING else (even if it seems reasonable)\n\nBe STRICT. Default to false.",
+                        "continueOnBlock": false
+                    }
+                ]
+            }
+        ]
+    }
 }
